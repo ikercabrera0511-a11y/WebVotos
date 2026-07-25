@@ -1,0 +1,7 @@
+name = "votos-cancion-reglezz"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "VOTES"
+id = "bf7afeffe0534890a4697c83c2e38616"
