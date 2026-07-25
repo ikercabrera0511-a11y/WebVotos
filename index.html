@@ -198,10 +198,10 @@
   }
 
   @media (max-width: 700px) {
-    .meta { flex: 1 1 100%; order: 1; }
+    .chip { order: 0; }
+    .meta { flex: 1 1 auto; min-width: 0; order: 1; }
     .player { flex: 1 1 100%; order: 2; }
     .vote-btn { flex: 1 1 100%; order: 3; }
-    .chip { order: 0; }
   }
 
   .play-btn {
@@ -299,7 +299,7 @@
   }
   .results-head .total {
     font-size: 13px;
-    color: var(--muted);
+    color: var(--text);
   }
   .results-head .total b { color: var(--text); }
 
