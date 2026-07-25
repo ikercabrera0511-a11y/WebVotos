@@ -41,7 +41,16 @@
   body {
     background-image:
       radial-gradient(ellipse 900px 500px at 15% -10%, rgba(255,180,84,0.12), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 95% 5%, rgba(255,77,141,0.09), transparent 60%);
+      radial-gradient(ellipse 700px 500px at 95% 5%, rgba(255,77,141,0.09), transparent 60%),
+      linear-gradient(rgba(18,14,30,0.80), rgba(18,14,30,0.88)),
+      url('img/foto-3.jpg');
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-position: top left, top right, center, center top;
+    background-size: auto, auto, cover, cover;
+    background-attachment: scroll, scroll, scroll, fixed;
+  }
+  @media (max-width: 768px) {
+    body { background-attachment: scroll, scroll, scroll, scroll; }
   }
 
   /* ---------- Recuadro base: toda la web se construye a partir de esta caja ---------- */
