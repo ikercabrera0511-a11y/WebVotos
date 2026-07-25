@@ -696,6 +696,8 @@ function renderResults(votes) {
   document.getElementById("totalVotes").textContent = total;
 
   const max = Math.max(...SONGS.map(s => votes[s] || 0), 1);
+  const leadersCount = SONGS.filter(s => (votes[s] || 0) === max).length;
+  const isTie = total > 0 && max > 0 && leadersCount > 1;
 
   SONGS.forEach(song => {
     const row = document.querySelector(`.result-row[data-row="${song}"]`);
@@ -704,7 +706,9 @@ function renderResults(votes) {
     row.querySelector(".bar-fill").style.width = pct + "%";
     row.querySelector(".pct").textContent = pct + "%";
     const isLeader = total > 0 && count === max && count > 0;
-    row.querySelector(".leader-tag").style.display = isLeader ? "inline-block" : "none";
+    const tag = row.querySelector(".leader-tag");
+    tag.textContent = isTie ? "Empate" : "Va ganando";
+    tag.style.display = isLeader ? "inline-block" : "none";
     row.classList.toggle("leading", isLeader);
   });
 }
