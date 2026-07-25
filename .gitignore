@@ -2,3 +2,6 @@
 .wrangler/
 node_modules/
 .playwright-mcp/
+
+# Local Netlify folder
+.netlify
