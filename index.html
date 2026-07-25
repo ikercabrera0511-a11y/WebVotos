@@ -17,6 +17,7 @@
     --pink: #FF4D8D;
     --indigo: #6E6BFF;
     --teal: #2DD9A6;
+    --violet: #C05CFF;
     --text: #F3EFE8;
     --muted: #8F87A8;
     --line: rgba(255,255,255,0.14);
@@ -134,6 +135,7 @@
   .card[data-song="mala"] .chip { background: linear-gradient(155deg, #FF4D8D, #B23A6B); }
   .card[data-song="olvidate"] .chip { background: linear-gradient(155deg, #6E6BFF, #3A2CB2); }
   .card[data-song="recuerdos"] .chip { background: linear-gradient(155deg, #2DD9A6, #1B8F6C); }
+  .card[data-song="pasiempre"] .chip { background: linear-gradient(155deg, #C05CFF, #7A2BD9); }
 
   .chip .bars {
     position: absolute;
@@ -275,6 +277,9 @@
   /* ---------- Resultados: recuadro contenedor + un recuadro por fila ---------- */
   .results.box {
     padding: 24px;
+    background-image: linear-gradient(180deg, rgba(24,19,40,0.55), rgba(14,11,24,0.72)), url('img/foto-2.jpg');
+    background-size: cover;
+    background-position: center 20%;
   }
   .results-head {
     display: flex;
@@ -339,6 +344,7 @@
   .dot.c-mala { background: var(--pink); }
   .dot.c-olvidate { background: var(--indigo); }
   .dot.c-recuerdos { background: var(--teal); }
+  .dot.c-pasiempre { background: var(--violet); }
 
   .bar-track {
     height: 30px;
@@ -364,6 +370,7 @@
   .bar-fill.c-mala { background: linear-gradient(90deg, #FF4D8D, #B23A6B); }
   .bar-fill.c-olvidate { background: linear-gradient(90deg, #6E6BFF, #3A2CB2); }
   .bar-fill.c-recuerdos { background: linear-gradient(90deg, #2DD9A6, #1B8F6C); }
+  .bar-fill.c-pasiempre { background: linear-gradient(90deg, #C05CFF, #7A2BD9); }
   .bar-fill i {
     width: 2px;
     background: rgba(0,0,0,0.4);
@@ -511,6 +518,29 @@
       <button class="vote-btn">Votar esta canción</button>
     </div>
 
+    <div class="card box" data-song="pasiempre">
+      <div class="chip">
+        <img class="track-no" src="img/numero-5.png" alt="5">
+        <div class="bars"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="meta">
+        <p class="track-title">Pa Siempre</p>
+        <p class="track-sub">Adelanto de 30s</p>
+      </div>
+      <div class="player">
+        <button class="play-btn" aria-label="Reproducir">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="icon-play"><path d="M8 5v14l11-7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" class="icon-pause" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+        <div class="scrub">
+          <div class="scrub-track"><div class="scrub-fill"></div></div>
+          <div class="scrub-time"><span class="cur">0:00</span><span class="dur">0:00</span></div>
+        </div>
+      </div>
+      <audio preload="none" src="audio/pa-siempre.mp3"></audio>
+      <button class="vote-btn">Votar esta canción</button>
+    </div>
+
   </div>
 
   <div class="results box">
@@ -540,6 +570,11 @@
         <div class="bar-track"><div class="bar-fill c-recuerdos"><i></i><i></i><i></i></div></div>
         <div class="pct">0%</div>
       </div>
+      <div class="result-row" data-row="pasiempre">
+        <div class="label"><span class="dot c-pasiempre"></span><span class="name">Pa Siempre</span><span class="leader-tag" style="display:none">Va ganando</span></div>
+        <div class="bar-track"><div class="bar-fill c-pasiempre"><i></i><i></i><i></i></div></div>
+        <div class="pct">0%</div>
+      </div>
     </div>
   </div>
 
@@ -559,7 +594,7 @@ const CONFIG = {
   API_URL: "https://votos-cancion-reglezz.reglezzmusic-0bb.workers.dev"
 };
 
-const SONGS = ["adicto", "mala", "olvidate", "recuerdos"];
+const SONGS = ["adicto", "mala", "olvidate", "recuerdos", "pasiempre"];
 const VOTED_KEY = "cancion_votada_v2";
 const LOCAL_VOTES_KEY = "votos_demo_v2";
 

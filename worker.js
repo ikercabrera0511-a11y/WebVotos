@@ -27,7 +27,7 @@
  *    CONFIG.API_URL dentro de index.html
  */
 
-const ALLOWED_SONGS = ["adicto", "mala", "olvidate", "recuerdos"];
+const ALLOWED_SONGS = ["adicto", "mala", "olvidate", "recuerdos", "pasiempre"];
 
 export default {
   async fetch(request, env) {
@@ -43,7 +43,7 @@ export default {
     }
 
     if (url.pathname === "/votes" && request.method === "GET") {
-      const data = (await env.VOTES.get("counts", "json")) || { adicto: 0, mala: 0, olvidate: 0, recuerdos: 0 };
+      const data = (await env.VOTES.get("counts", "json")) || { adicto: 0, mala: 0, olvidate: 0, recuerdos: 0, pasiempre: 0 };
       return new Response(JSON.stringify(data), {
         headers: { ...cors, "Content-Type": "application/json" },
       });
@@ -68,7 +68,7 @@ export default {
         });
       }
 
-      const data = (await env.VOTES.get("counts", "json")) || { adicto: 0, mala: 0, olvidate: 0, recuerdos: 0 };
+      const data = (await env.VOTES.get("counts", "json")) || { adicto: 0, mala: 0, olvidate: 0, recuerdos: 0, pasiempre: 0 };
       data[song] = (data[song] || 0) + 1;
       if (previousSong && previousSong !== song && ALLOWED_SONGS.includes(previousSong)) {
         data[previousSong] = Math.max(0, (data[previousSong] || 0) - 1);
