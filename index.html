@@ -307,9 +307,9 @@
   }
 
   .result-row {
-    background: var(--panel-2);
+    background: rgba(0,0,0,0.18);
     border: 2px solid var(--line-soft);
-    border-radius: var(--r-md);
+    border-radius: var(--r-sm);
     padding: 12px 14px;
     display: grid;
     grid-template-columns: 150px 1fr 56px;
@@ -334,16 +334,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .result-row .label .dot {
-    width: 10px; height: 10px;
-    border-radius: 3px;
+  .result-row .label .result-no {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
     flex-shrink: 0;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.45));
   }
-  .dot.c-adicto { background: var(--amber); }
-  .dot.c-mala { background: var(--pink); }
-  .dot.c-olvidate { background: var(--indigo); }
-  .dot.c-recuerdos { background: var(--teal); }
-  .dot.c-pasiempre { background: var(--violet); }
 
   .bar-track {
     height: 30px;
@@ -365,14 +362,14 @@
     padding-left: 10px;
     transition: width 0.7s cubic-bezier(.2,.9,.3,1);
   }
-  .bar-fill.c-adicto { background: linear-gradient(90deg, #FFB454, #FF7A45); }
-  .bar-fill.c-mala { background: linear-gradient(90deg, #FF4D8D, #B23A6B); }
-  .bar-fill.c-olvidate { background: linear-gradient(90deg, #6E6BFF, #3A2CB2); }
-  .bar-fill.c-recuerdos { background: linear-gradient(90deg, #2DD9A6, #1B8F6C); }
-  .bar-fill.c-pasiempre { background: linear-gradient(90deg, #C05CFF, #7A2BD9); }
+  .bar-fill.c-adicto,
+  .bar-fill.c-mala,
+  .bar-fill.c-olvidate,
+  .bar-fill.c-recuerdos,
+  .bar-fill.c-pasiempre { background: #ffffff; }
   .bar-fill i {
     width: 2px;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.35);
     border-radius: 1px;
     animation: eq 1.1s ease-in-out infinite;
   }
@@ -432,7 +429,6 @@
       </div>
       <div class="meta">
         <p class="track-title">Adicto a tu Cuerpo</p>
-        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -455,7 +451,6 @@
       </div>
       <div class="meta">
         <p class="track-title">Mala x3</p>
-        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -478,7 +473,6 @@
       </div>
       <div class="meta">
         <p class="track-title">Olvídate de Él</p>
-        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -501,7 +495,6 @@
       </div>
       <div class="meta">
         <p class="track-title">Recuerdos</p>
-        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -524,7 +517,6 @@
       </div>
       <div class="meta">
         <p class="track-title">Pa Siempre</p>
-        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -550,27 +542,27 @@
 
     <div class="results-list">
       <div class="result-row" data-row="adicto">
-        <div class="label"><span class="dot c-adicto"></span><span class="name">Adicto a tu Cuerpo</span><span class="leader-tag" style="display:none">Va ganando</span></div>
+        <div class="label"><img class="result-no" src="img/numero-1.png" alt="1"><span class="name">Adicto a tu Cuerpo</span><span class="leader-tag" style="display:none">Va ganando</span></div>
         <div class="bar-track"><div class="bar-fill c-adicto"><i></i><i></i><i></i></div></div>
         <div class="pct">0%</div>
       </div>
       <div class="result-row" data-row="mala">
-        <div class="label"><span class="dot c-mala"></span><span class="name">Mala x3</span><span class="leader-tag" style="display:none">Va ganando</span></div>
+        <div class="label"><img class="result-no" src="img/numero-2.png" alt="2"><span class="name">Mala x3</span><span class="leader-tag" style="display:none">Va ganando</span></div>
         <div class="bar-track"><div class="bar-fill c-mala"><i></i><i></i><i></i></div></div>
         <div class="pct">0%</div>
       </div>
       <div class="result-row" data-row="olvidate">
-        <div class="label"><span class="dot c-olvidate"></span><span class="name">Olvídate de Él</span><span class="leader-tag" style="display:none">Va ganando</span></div>
+        <div class="label"><img class="result-no" src="img/numero-3.png" alt="3"><span class="name">Olvídate de Él</span><span class="leader-tag" style="display:none">Va ganando</span></div>
         <div class="bar-track"><div class="bar-fill c-olvidate"><i></i><i></i><i></i></div></div>
         <div class="pct">0%</div>
       </div>
       <div class="result-row" data-row="recuerdos">
-        <div class="label"><span class="dot c-recuerdos"></span><span class="name">Recuerdos</span><span class="leader-tag" style="display:none">Va ganando</span></div>
+        <div class="label"><img class="result-no" src="img/numero-4.png" alt="4"><span class="name">Recuerdos</span><span class="leader-tag" style="display:none">Va ganando</span></div>
         <div class="bar-track"><div class="bar-fill c-recuerdos"><i></i><i></i><i></i></div></div>
         <div class="pct">0%</div>
       </div>
       <div class="result-row" data-row="pasiempre">
-        <div class="label"><span class="dot c-pasiempre"></span><span class="name">Pa Siempre</span><span class="leader-tag" style="display:none">Va ganando</span></div>
+        <div class="label"><img class="result-no" src="img/numero-5.png" alt="5"><span class="name">Pa Siempre</span><span class="leader-tag" style="display:none">Va ganando</span></div>
         <div class="bar-track"><div class="bar-fill c-pasiempre"><i></i><i></i><i></i></div></div>
         <div class="pct">0%</div>
       </div>
