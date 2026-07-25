@@ -36,6 +36,7 @@
     color: var(--text);
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
   }
 
   body {
@@ -50,9 +51,14 @@
   }
   @media (max-width: 768px) {
     body {
+      background-image:
+        radial-gradient(ellipse 900px 500px at 15% -10%, rgba(255,180,84,0.12), transparent 60%),
+        radial-gradient(ellipse 700px 500px at 95% 5%, rgba(255,77,141,0.09), transparent 60%),
+        linear-gradient(rgba(18,14,30,0.42), rgba(18,14,30,0.55)),
+        url('img/foto-4.webp');
       background-position: top left, top right, center, top center;
       background-size: auto, auto, cover, 100% auto;
-      background-repeat: no-repeat, no-repeat, no-repeat, repeat-y;
+      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat round;
     }
   }
 
@@ -83,16 +89,6 @@
     background: rgba(255,180,84,0.08);
     border-color: rgba(255,180,84,0.3);
   }
-  .live-banner {
-    display: none;
-    padding: 12px 18px;
-    font-size: 13px;
-    text-align: center;
-    color: var(--teal);
-    background: rgba(45,217,166,0.08);
-    border-color: rgba(45,217,166,0.3);
-  }
-  .live-banner b { color: var(--teal); }
 
   /* ---------- Header box ---------- */
   header.box.hero {
@@ -124,7 +120,7 @@
     position: relative;
   }
   .card:hover { background: rgba(255,255,255,0.20); }
-  .card.playing { border-color: rgba(255,180,84,0.55); }
+  .card.playing { border-color: rgba(255,77,141,0.55); }
 
   .chip {
     width: 52px;
@@ -238,7 +234,7 @@
     position: absolute;
     top: 0; left: 0; height: 100%;
     width: 0%;
-    background: var(--amber);
+    background: #fff;
     border-radius: 3px;
   }
   .scrub-time {
@@ -416,9 +412,6 @@
   <div class="demo-banner box" id="demoBanner">
     Modo demo — los votos se guardan solo en este navegador. Conecta el backend (ver comentario CONFIG en el código) para compartir los votos entre todos los visitantes.
   </div>
-  <div class="live-banner box" id="liveBanner">
-    <b>● En vivo</b> — los votos se comparten con todas las personas que visitan esta página.
-  </div>
 
   <header class="box hero">
     <img class="hero-img" src="img/foto-principal.webp" alt="La Referencia">
@@ -593,9 +586,7 @@ const SONGS = ["adicto", "mala", "olvidate", "recuerdos", "pasiempre"];
 const VOTED_KEY = "cancion_votada_v2";
 const LOCAL_VOTES_KEY = "votos_demo_v2";
 
-if (CONFIG.API_URL) {
-  document.getElementById("liveBanner").style.display = "block";
-} else {
+if (!CONFIG.API_URL) {
   document.getElementById("demoBanner").style.display = "block";
 }
 
