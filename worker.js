@@ -60,7 +60,7 @@ export default {
         });
       }
 
-      const { song } = body;
+      const { song, previousSong } = body;
       if (!ALLOWED_SONGS.includes(song)) {
         return new Response(JSON.stringify({ error: "canción inválida" }), {
           status: 400,
@@ -70,6 +70,9 @@ export default {
 
       const data = (await env.VOTES.get("counts", "json")) || { adicto: 0, mala: 0, olvidate: 0, recuerdos: 0 };
       data[song] = (data[song] || 0) + 1;
+      if (previousSong && previousSong !== song && ALLOWED_SONGS.includes(previousSong)) {
+        data[previousSong] = Math.max(0, (data[previousSong] || 0) - 1);
+      }
       await env.VOTES.put("counts", JSON.stringify(data));
 
       return new Response(JSON.stringify(data), {

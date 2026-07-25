@@ -154,8 +154,10 @@
     font-family: 'Bebas Neue', sans-serif;
   }
   .chip .track-no {
-    font-size: 22px;
-    color: rgba(0,0,0,0.5);
+    width: 62%;
+    height: 62%;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.35));
   }
   .card[data-song="adicto"] .chip { background: linear-gradient(155deg, #FFB454, #FF7A45); }
   .card[data-song="mala"] .chip { background: linear-gradient(155deg, #FF4D8D, #B23A6B); }
@@ -450,12 +452,12 @@
 
     <div class="card box" data-song="adicto">
       <div class="chip">
-        <span class="track-no">01</span>
+        <img class="track-no" src="img/numero-1.png" alt="1">
         <div class="bars"><i></i><i></i><i></i><i></i></div>
       </div>
       <div class="meta">
         <p class="track-title">Adicto a tu Cuerpo</p>
-        <p class="track-sub">Adelanto</p>
+        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -473,12 +475,12 @@
 
     <div class="card box" data-song="mala">
       <div class="chip">
-        <span class="track-no">02</span>
+        <img class="track-no" src="img/numero-2.png" alt="2">
         <div class="bars"><i></i><i></i><i></i><i></i></div>
       </div>
       <div class="meta">
         <p class="track-title">Mala x3</p>
-        <p class="track-sub">Adelanto</p>
+        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -496,12 +498,12 @@
 
     <div class="card box" data-song="olvidate">
       <div class="chip">
-        <span class="track-no">03</span>
+        <img class="track-no" src="img/numero-3.png" alt="3">
         <div class="bars"><i></i><i></i><i></i><i></i></div>
       </div>
       <div class="meta">
         <p class="track-title">Olvídate de Él</p>
-        <p class="track-sub">Adelanto</p>
+        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -519,12 +521,12 @@
 
     <div class="card box" data-song="recuerdos">
       <div class="chip">
-        <span class="track-no">04</span>
+        <img class="track-no" src="img/numero-4.png" alt="4">
         <div class="bars"><i></i><i></i><i></i><i></i></div>
       </div>
       <div class="meta">
         <p class="track-title">Recuerdos</p>
-        <p class="track-sub">Adelanto</p>
+        <p class="track-sub">Adelanto de 30s</p>
       </div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
@@ -572,7 +574,7 @@
     </div>
   </div>
 
-  <footer class="note box">Un voto por persona. Gracias por ayudar a elegir el próximo sencillo.</footer>
+  <footer class="note box">Puedes cambiar tu voto cuando quieras. Gracias por ayudar a elegir el próximo sencillo.</footer>
 </div>
 
 <script>
@@ -599,6 +601,8 @@ if (CONFIG.API_URL) {
 }
 
 // ---------- Reproductor de audio ----------
+const PREVIEW_SECONDS = 30;
+
 document.querySelectorAll(".card").forEach(card => {
   const btn = card.querySelector(".play-btn");
   const audio = card.querySelector("audio");
@@ -626,6 +630,7 @@ document.querySelectorAll(".card").forEach(card => {
       }
     });
     if (audio.paused) {
+      if (audio.currentTime >= PREVIEW_SECONDS - 0.05) audio.currentTime = 0;
       audio.play().catch(() => {});
     } else {
       audio.pause();
@@ -642,17 +647,25 @@ document.querySelectorAll(".card").forEach(card => {
     iconPlay.style.display = "";
     iconPause.style.display = "none";
   });
-  audio.addEventListener("loadedmetadata", () => { durEl.textContent = fmt(audio.duration); });
+  audio.addEventListener("loadedmetadata", () => {
+    durEl.textContent = fmt(Math.min(audio.duration, PREVIEW_SECONDS));
+  });
   audio.addEventListener("timeupdate", () => {
-    curEl.textContent = fmt(audio.currentTime);
-    if (audio.duration) fill.style.width = (audio.currentTime / audio.duration * 100) + "%";
+    if (audio.currentTime >= PREVIEW_SECONDS) {
+      audio.pause();
+      audio.currentTime = PREVIEW_SECONDS;
+    }
+    const cap = Math.min(audio.duration || PREVIEW_SECONDS, PREVIEW_SECONDS);
+    curEl.textContent = fmt(Math.min(audio.currentTime, PREVIEW_SECONDS));
+    fill.style.width = (Math.min(audio.currentTime, PREVIEW_SECONDS) / cap * 100) + "%";
   });
   audio.addEventListener("ended", () => card.classList.remove("playing"));
 
   track.addEventListener("click", (e) => {
     const rect = track.getBoundingClientRect();
-    const ratio = (e.clientX - rect.left) / rect.width;
-    if (audio.duration) audio.currentTime = ratio * audio.duration;
+    const ratio = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 1);
+    const cap = Math.min(audio.duration || PREVIEW_SECONDS, PREVIEW_SECONDS);
+    audio.currentTime = ratio * cap;
   });
 });
 
@@ -670,17 +683,20 @@ async function getVotes() {
   return raw ? JSON.parse(raw) : emptyVotes();
 }
 
-async function castVote(song) {
+async function castVote(song, previousSong) {
   if (CONFIG.API_URL) {
     const res = await fetch(`${CONFIG.API_URL}/vote`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ song })
+      body: JSON.stringify({ song, previousSong })
     });
     return res.json();
   }
   const votes = await getVotes();
   votes[song] = (votes[song] || 0) + 1;
+  if (previousSong && previousSong !== song) {
+    votes[previousSong] = Math.max(0, (votes[previousSong] || 0) - 1);
+  }
   localStorage.setItem(LOCAL_VOTES_KEY, JSON.stringify(votes));
   return votes;
 }
@@ -705,12 +721,10 @@ function renderResults(votes) {
 
 function markVoted(song) {
   document.querySelectorAll(".vote-btn").forEach(b => {
-    b.disabled = true;
-    b.textContent = "Gracias por tu voto";
+    const isThis = b.closest(".card").dataset.song === song;
+    b.classList.toggle("voted", isThis);
+    b.textContent = isThis ? "Tu voto ✓" : "Votar esta canción";
   });
-  const votedBtn = document.querySelector(`.card[data-song="${song}"] .vote-btn`);
-  votedBtn.classList.add("voted");
-  votedBtn.textContent = "Tu voto ✓";
 }
 
 async function init() {
@@ -722,19 +736,22 @@ async function init() {
 
   document.querySelectorAll(".vote-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
-      if (localStorage.getItem(VOTED_KEY)) return;
       const song = btn.closest(".card").dataset.song;
+      const currentVote = localStorage.getItem(VOTED_KEY);
+      if (currentVote === song) return;
+      const original = btn.textContent;
       btn.disabled = true;
       btn.textContent = "Votando…";
       try {
-        const updated = await castVote(song);
+        const updated = await castVote(song, currentVote);
         localStorage.setItem(VOTED_KEY, song);
         renderResults(updated);
         markVoted(song);
       } catch (err) {
-        btn.disabled = false;
-        btn.textContent = "Votar esta canción";
+        btn.textContent = original;
         alert("No se pudo registrar el voto. Inténtalo de nuevo.");
+      } finally {
+        btn.disabled = false;
       }
     });
   });
