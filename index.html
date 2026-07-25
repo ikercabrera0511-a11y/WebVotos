@@ -80,45 +80,16 @@
   .live-banner b { color: var(--teal); }
 
   /* ---------- Header box ---------- */
-  header.box {
-    text-align: center;
-    padding: 44px 24px;
+  header.box.hero {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
   }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--pink);
-    font-weight: 700;
-    margin-bottom: 18px;
-  }
-  .eyebrow::before, .eyebrow::after{
-    content:"";
-    width: 22px; height:2px;
-    background: var(--pink);
-    opacity:0.6;
-    border-radius: 2px;
-  }
-
-  h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 6.5vw, 68px);
-    line-height: 0.98;
-    letter-spacing: 0.01em;
-    margin: 0 0 16px;
-  }
-  h1 span { color: var(--amber); }
-
-  .subtitle {
-    color: var(--muted);
-    font-size: 16px;
-    max-width: 480px;
-    margin: 0 auto;
-    line-height: 1.6;
+  .hero-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
 
   /* ---------- Lista de canciones (una fila = un recuadro) ---------- */
@@ -442,10 +413,8 @@
     <b>● En vivo</b> — los votos se comparten con todas las personas que visitan esta página.
   </div>
 
-  <header class="box">
-    <div class="eyebrow">Tú decides el sencillo</div>
-    <h1>¿Cuál suena<br><span>más fuerte?</span></h1>
-    <p class="subtitle">Escucha los cuatro adelantos y vota tu favorito. El más votado será el próximo sencillo.</p>
+  <header class="box hero">
+    <img class="hero-img" src="img/foto-principal.png" alt="La Referencia">
   </header>
 
   <div class="songs-list">
