@@ -403,6 +403,71 @@
     color: var(--text);
     font-weight: 600;
   }
+
+  /* ---------- Únete al team ---------- */
+  .team.box {
+    padding: 24px;
+    text-align: center;
+  }
+  .team.box h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.03em;
+    margin: 0 0 6px;
+    color: #fff;
+  }
+  .team-sub {
+    font-size: 13px;
+    color: rgba(243,239,232,0.85);
+    margin: 0 0 18px;
+  }
+  .team-form {
+    display: flex;
+    gap: 10px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .team-input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border-radius: var(--r-sm);
+    border: 2px solid var(--line);
+    background: rgba(0,0,0,0.18);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+  }
+  .team-input::placeholder { color: rgba(243,239,232,0.65); }
+  .team-input:focus { outline: none; border-color: var(--pink); }
+  .team-btn {
+    flex: 0 0 auto;
+    padding: 12px 22px;
+    border-radius: var(--r-sm);
+    border: 2px solid var(--pink);
+    background: var(--pink);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .team-btn:hover:not(:disabled) { background: #ff2f7d; }
+  .team-btn:disabled { opacity: 0.6; cursor: default; }
+  .team-msg {
+    margin: 14px 0 0;
+    font-size: 12px;
+    font-weight: 600;
+    min-height: 16px;
+  }
+  .team-msg.ok { color: var(--teal); }
+  .team-msg.err { color: var(--pink); }
+
+  @media (max-width: 480px) {
+    .team-form { flex-direction: column; }
+  }
 </style>
 </head>
 <body>
@@ -566,7 +631,15 @@
     </div>
   </div>
 
-  <footer class="note box">Puedes cambiar tu voto cuando quieras. Gracias por ayudar a elegir el próximo sencillo.</footer>
+  <div class="team box" id="teamBox">
+    <h2>ÚNETE AL TEAM</h2>
+    <p class="team-sub">Deja tu correo y entérate antes que nadie de las novedades.</p>
+    <form class="team-form" id="teamForm">
+      <input type="email" id="teamEmail" class="team-input" placeholder="tu@email.com" required autocomplete="email">
+      <button type="submit" class="team-btn">Unirme</button>
+    </form>
+    <p class="team-msg" id="teamMsg"></p>
+  </div>
 </div>
 
 <script>
@@ -579,7 +652,11 @@
    los votos solo se guardan en el navegador de cada persona.
    ============================================================ */
 const CONFIG = {
-  API_URL: "https://votos-cancion-reglezz.reglezzmusic-0bb.workers.dev"
+  API_URL: "https://votos-cancion-reglezz.reglezzmusic-0bb.workers.dev",
+  /* "Únete al team": correos enviados directamente a un Google
+     Form vinculado a una Google Sheet (cada respuesta = una fila). */
+  SHEETS_FORM_URL: "https://docs.google.com/forms/d/e/1FAIpQLScGatGdn2Bmu79hf0EMyEIelxGPRSwDF_-_jQ6zVIKcTrcrhg/formResponse",
+  SHEETS_FORM_FIELD: "entry.16969801"
 };
 
 const SONGS = ["adicto", "mala", "olvidate", "recuerdos", "pasiempre"];
@@ -760,6 +837,42 @@ async function init() {
 }
 
 init();
+
+// ---------- Únete al team ----------
+const teamForm = document.getElementById("teamForm");
+const teamMsg = document.getElementById("teamMsg");
+
+teamForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const emailInput = document.getElementById("teamEmail");
+  const email = emailInput.value.trim();
+  if (!email) return;
+
+  const btn = teamForm.querySelector(".team-btn");
+  btn.disabled = true;
+  btn.textContent = "Enviando…";
+  teamMsg.textContent = "";
+  teamMsg.className = "team-msg";
+
+  try {
+    if (CONFIG.SHEETS_FORM_URL && CONFIG.SHEETS_FORM_FIELD) {
+      await fetch(CONFIG.SHEETS_FORM_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: new URLSearchParams({ [CONFIG.SHEETS_FORM_FIELD]: email })
+      });
+    }
+    teamMsg.textContent = "¡Gracias por unirte! Te avisaremos de las novedades.";
+    teamMsg.classList.add("ok");
+    teamForm.reset();
+  } catch (err) {
+    teamMsg.textContent = "No se pudo enviar. Inténtalo de nuevo.";
+    teamMsg.classList.add("err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Unirme";
+  }
+});
 </script>
 </body>
 </html>
