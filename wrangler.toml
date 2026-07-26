@@ -1,4 +1,4 @@
-name = "votos-cancion-reglezz"
+name = "reglevo"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
