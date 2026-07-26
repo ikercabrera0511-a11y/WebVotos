@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>¿Cuál será el próximo sencillo? — Vota</title>
+<title>LAREFERENCIABBY</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -563,6 +563,32 @@
   @media (max-width: 480px) {
     .team-form { flex-direction: column; }
   }
+
+  /* ---------- Footer: logo + usuario ---------- */
+  .site-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0 4px;
+  }
+  .site-footer-logo {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 14px rgba(255,60,160,0.5));
+  }
+  .site-footer-handle {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #fff;
+    text-shadow:
+      0 1px 0 rgba(255,255,255,0.5),
+      0 2px 8px rgba(255,60,160,0.75),
+      0 0 18px rgba(255,60,160,0.5);
+  }
 </style>
 </head>
 <body>
@@ -748,6 +774,11 @@
       <button type="submit" class="team-btn">Unirme</button>
     </form>
     <p class="team-msg" id="teamMsg"></p>
+  </div>
+
+  <div class="site-footer">
+    <img class="site-footer-logo" src="img/logo.png" alt="Logo">
+    <p class="site-footer-handle">@keyworkzz</p>
   </div>
 </div>
 
