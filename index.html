@@ -22,7 +22,7 @@
     --muted: #8F87A8;
     --line: rgba(255,255,255,0.14);
     --line-soft: rgba(255,255,255,0.08);
-    --r-lg: 20px;
+    --r-lg: 30px;
     --r-md: 14px;
     --r-sm: 10px;
   }
@@ -64,11 +64,61 @@
 
   /* ---------- Recuadro base: toda la web se construye a partir de esta caja ---------- */
   .box {
-    background: rgba(255,255,255,0.12);
-    border: 2px solid rgba(255,255,255,0.40);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(160deg, rgba(150,80,135,0.55), rgba(85,42,90,0.55));
+    border: none;
     border-radius: var(--r-lg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.9),
+      inset 0 0 0 5px rgba(255,105,190,0.95),
+      inset 0 0 0 8px rgba(255,255,255,0.35),
+      inset 0 0 0 11px rgba(214,60,150,0.9),
+      0 0 3px rgba(255,255,255,0.7),
+      0 0 22px rgba(255,60,160,0.6),
+      0 0 55px rgba(255,60,160,0.3);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: box-shadow 0.2s ease;
+  }
+  .box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.9) 0.6px, transparent 0.8px);
+    background-size: 7px 7px;
+    opacity: 0.16;
+    mix-blend-mode: screen;
+    -webkit-mask-image: radial-gradient(closest-side, transparent 68%, black 100%);
+    mask-image: radial-gradient(closest-side, transparent 68%, black 100%);
+    pointer-events: none;
+  }
+  .box::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle 2.5px at 9% 14%, #fff, transparent 65%),
+      radial-gradient(circle 1.6px at 38% 5%, #fff, transparent 65%),
+      radial-gradient(circle 2.2px at 93% 11%, #fff, transparent 65%),
+      radial-gradient(circle 2px at 97% 58%, #fff, transparent 65%),
+      radial-gradient(circle 2.4px at 7% 90%, #fff, transparent 65%),
+      radial-gradient(circle 1.8px at 52% 96%, #fff, transparent 65%),
+      radial-gradient(circle 2.3px at 91% 92%, #fff, transparent 65%),
+      radial-gradient(circle 1.6px at 2% 45%, #fff, transparent 65%);
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.95));
+    opacity: 0.9;
+  }
+  .box:hover {
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,1),
+      inset 0 0 0 5px rgba(255,90,185,1),
+      inset 0 0 0 8px rgba(255,255,255,0.4),
+      inset 0 0 0 11px rgba(230,50,145,0.95),
+      0 0 4px rgba(255,255,255,0.8),
+      0 0 28px rgba(255,60,160,0.75),
+      0 0 65px rgba(255,60,160,0.38);
   }
 
   .wrap {
@@ -86,8 +136,11 @@
     font-size: 13px;
     text-align: center;
     color: var(--amber);
-    background: rgba(255,180,84,0.08);
-    border-color: rgba(255,180,84,0.3);
+    background: rgba(255,180,84,0.12);
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.6),
+      inset 0 0 0 4px rgba(255,180,84,0.9),
+      0 0 20px rgba(255,180,84,0.4);
   }
 
   /* ---------- Header box ---------- */
@@ -110,21 +163,43 @@
     gap: 12px;
   }
 
-  .card {
-    padding: 14px 16px;
+  .card.box {
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .card.playing {
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,1),
+      inset 0 0 0 5px rgba(255,70,175,1),
+      inset 0 0 0 8px rgba(255,255,255,0.4),
+      inset 0 0 0 11px rgba(220,30,130,0.95),
+      0 0 4px rgba(255,255,255,0.8),
+      0 0 32px rgba(255,50,150,0.85),
+      0 0 70px rgba(255,50,150,0.4);
+  }
+
+  .card-top {
     display: flex;
     align-items: center;
     gap: 16px;
-    flex-wrap: wrap;
-    transition: background 0.2s ease, border-color 0.2s ease;
     position: relative;
+    z-index: 1;
   }
-  .card:hover { background: rgba(255,255,255,0.20); }
-  .card.playing { border-color: rgba(255,77,141,0.55); }
+  .card-divider {
+    height: 2px;
+    flex: none;
+    margin: 0 -26px;
+    background: linear-gradient(90deg, transparent, rgba(255,150,205,0.85), transparent);
+    box-shadow: 0 0 10px rgba(255,110,180,0.7);
+    position: relative;
+    z-index: 1;
+  }
 
   .chip {
-    width: 52px;
-    height: 52px;
+    width: 62px;
+    height: 62px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -172,10 +247,17 @@
     min-width: 130px;
   }
   .track-title {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 19px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
     margin: 0 0 2px;
     line-height: 1.2;
+    color: #fff;
+    text-shadow:
+      0 1px 0 rgba(255,255,255,0.5),
+      0 2px 8px rgba(255,60,160,0.75),
+      0 0 18px rgba(255,60,160,0.5);
   }
   .track-sub {
     font-size: 12px;
@@ -183,50 +265,52 @@
   }
 
   .player {
-    flex: 2 1 240px;
+    width: 100%;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px;
+    gap: 14px;
+    padding: 10px;
     background: rgba(0,0,0,0.18);
-    border: 2px solid var(--line-soft);
-    border-radius: var(--r-sm);
+    border-radius: 16px;
+    position: relative;
+    z-index: 1;
+    box-shadow:
+      inset 0 0 0 1.5px rgba(255,150,205,0.85),
+      0 0 10px rgba(255,90,170,0.35);
   }
 
   @media (max-width: 700px) {
-    .chip { order: 0; }
-    .meta { flex: 1 1 auto; min-width: 0; order: 1; }
-    .player { flex: 1 1 100%; order: 2; }
-    .vote-btn { flex: 1 1 100%; order: 3; }
+    .card-top { flex-wrap: wrap; }
   }
 
   .play-btn {
-    width: 38px; height: 38px;
-    border-radius: 9px;
+    width: 46px; height: 46px;
+    border-radius: 14px;
     border: none;
     background: var(--text);
-    color: var(--bg);
+    color: #2b1f35;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
     transition: transform 0.15s ease;
   }
   .play-btn:hover { transform: scale(1.06); }
-  .play-btn svg { width: 15px; height: 15px; }
+  .play-btn svg { width: 17px; height: 17px; }
 
   .scrub {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     min-width: 0;
   }
   .scrub-track {
-    height: 5px;
-    background: rgba(255,255,255,0.12);
-    border-radius: 3px;
+    height: 8px;
+    background: rgba(255,190,220,0.5);
+    border-radius: 999px;
     position: relative;
     cursor: pointer;
   }
@@ -235,35 +319,39 @@
     top: 0; left: 0; height: 100%;
     width: 0%;
     background: #fff;
-    border-radius: 3px;
+    border-radius: 999px;
   }
   .scrub-time {
-    font-size: 10px;
-    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--indigo);
     display: flex;
     justify-content: space-between;
   }
 
   .vote-btn {
-    flex: 0 0 auto;
-    width: auto;
+    width: 100%;
     white-space: nowrap;
-    padding: 12px 20px;
-    border-radius: var(--r-sm);
-    border: 2px solid var(--line);
-    background: transparent;
-    color: var(--text);
+    padding: 14px 20px;
+    border-radius: 999px;
+    border: 2px solid rgba(255,140,195,0.9);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 14px;
     letter-spacing: 0.02em;
     cursor: pointer;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 14px rgba(255,70,160,0.4);
     transition: all 0.2s ease;
   }
   .vote-btn:hover:not(:disabled) {
     background: var(--pink);
     border-color: var(--pink);
     color: #fff;
+    box-shadow: 0 0 20px rgba(255,70,160,0.65);
   }
   .vote-btn:disabled {
     opacity: 0.55;
@@ -273,6 +361,13 @@
     background: rgba(255,77,141,0.18);
     border-color: rgba(255,77,141,0.6);
     color: var(--pink);
+  }
+
+  @media (max-width: 700px) {
+    .vote-btn {
+      width: auto;
+      align-self: flex-start;
+    }
   }
 
   /* ---------- Resultados: recuadro contenedor + un recuadro por fila ---------- */
@@ -485,13 +580,16 @@
   <div class="songs-list">
 
     <div class="card box" data-song="adicto">
-      <div class="chip">
-        <img class="track-no" src="img/numero-1.webp" alt="1">
-        <div class="bars"><i></i><i></i><i></i><i></i></div>
+      <div class="card-top">
+        <div class="chip">
+          <img class="track-no" src="img/numero-1.webp" alt="1">
+          <div class="bars"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="meta">
+          <p class="track-title">ADICTO A TU CUERPO</p>
+        </div>
       </div>
-      <div class="meta">
-        <p class="track-title">ADICTO A TU CUERPO</p>
-      </div>
+      <div class="card-divider"></div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
           <svg viewBox="0 0 24 24" fill="currentColor" class="icon-play"><path d="M8 5v14l11-7z"/></svg>
@@ -507,13 +605,16 @@
     </div>
 
     <div class="card box" data-song="mala">
-      <div class="chip">
-        <img class="track-no" src="img/numero-2.webp" alt="2">
-        <div class="bars"><i></i><i></i><i></i><i></i></div>
+      <div class="card-top">
+        <div class="chip">
+          <img class="track-no" src="img/numero-2.webp" alt="2">
+          <div class="bars"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="meta">
+          <p class="track-title">TU ERES MALA</p>
+        </div>
       </div>
-      <div class="meta">
-        <p class="track-title">TU ERES MALA</p>
-      </div>
+      <div class="card-divider"></div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
           <svg viewBox="0 0 24 24" fill="currentColor" class="icon-play"><path d="M8 5v14l11-7z"/></svg>
@@ -529,13 +630,16 @@
     </div>
 
     <div class="card box" data-song="olvidate">
-      <div class="chip">
-        <img class="track-no" src="img/numero-3.webp" alt="3">
-        <div class="bars"><i></i><i></i><i></i><i></i></div>
+      <div class="card-top">
+        <div class="chip">
+          <img class="track-no" src="img/numero-3.webp" alt="3">
+          <div class="bars"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="meta">
+          <p class="track-title">OLVIDATE DE EL</p>
+        </div>
       </div>
-      <div class="meta">
-        <p class="track-title">OLVIDATE DE EL</p>
-      </div>
+      <div class="card-divider"></div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
           <svg viewBox="0 0 24 24" fill="currentColor" class="icon-play"><path d="M8 5v14l11-7z"/></svg>
@@ -551,13 +655,16 @@
     </div>
 
     <div class="card box" data-song="recuerdos">
-      <div class="chip">
-        <img class="track-no" src="img/numero-4.webp" alt="4">
-        <div class="bars"><i></i><i></i><i></i><i></i></div>
+      <div class="card-top">
+        <div class="chip">
+          <img class="track-no" src="img/numero-4.webp" alt="4">
+          <div class="bars"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="meta">
+          <p class="track-title">TU GANGSTER</p>
+        </div>
       </div>
-      <div class="meta">
-        <p class="track-title">TU GANGSTER</p>
-      </div>
+      <div class="card-divider"></div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
           <svg viewBox="0 0 24 24" fill="currentColor" class="icon-play"><path d="M8 5v14l11-7z"/></svg>
@@ -573,13 +680,16 @@
     </div>
 
     <div class="card box" data-song="pasiempre">
-      <div class="chip">
-        <img class="track-no" src="img/numero-5.webp" alt="5">
-        <div class="bars"><i></i><i></i><i></i><i></i></div>
+      <div class="card-top">
+        <div class="chip">
+          <img class="track-no" src="img/numero-5.webp" alt="5">
+          <div class="bars"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="meta">
+          <p class="track-title">HECHOS PA SIEMPRE</p>
+        </div>
       </div>
-      <div class="meta">
-        <p class="track-title">HECHOS PA SIEMPRE</p>
-      </div>
+      <div class="card-divider"></div>
       <div class="player">
         <button class="play-btn" aria-label="Reproducir">
           <svg viewBox="0 0 24 24" fill="currentColor" class="icon-play"><path d="M8 5v14l11-7z"/></svg>
@@ -599,7 +709,6 @@
   <div class="results box">
     <div class="results-head">
       <h2>Resultados en vivo</h2>
-      <div class="total"><b id="totalVotes">0</b> votos totales</div>
     </div>
 
     <div class="results-list">
@@ -660,6 +769,13 @@ const CONFIG = {
 };
 
 const SONGS = ["adicto", "mala", "olvidate", "recuerdos", "pasiempre"];
+const TITLES = {
+  adicto: "ADICTO A TU CUERPO",
+  mala: "TU ERES MALA",
+  olvidate: "OLVIDATE DE EL",
+  recuerdos: "TU GANGSTER",
+  pasiempre: "HECHOS PA SIEMPRE"
+};
 const VOTED_KEY = "cancion_votada_v2";
 const LOCAL_VOTES_KEY = "votos_demo_v2";
 
@@ -770,7 +886,6 @@ async function castVote(song, previousSong) {
 
 function renderResults(votes) {
   const total = SONGS.reduce((sum, s) => sum + (votes[s] || 0), 0);
-  document.getElementById("totalVotes").textContent = total;
 
   const max = Math.max(...SONGS.map(s => votes[s] || 0), 1);
   const leadersCount = SONGS.filter(s => (votes[s] || 0) === max).length;
@@ -837,6 +952,23 @@ async function init() {
 }
 
 init();
+
+// ---------- Acceso privado a los votos totales (solo para el propietario) ----------
+// Combinación secreta: Ctrl/Cmd + Shift + V. No aparece en ninguna parte
+// visible de la web, así que solo quien conozca esta combinación puede verla.
+document.addEventListener("keydown", async (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "v") {
+    e.preventDefault();
+    try {
+      const votes = await getVotes();
+      const total = SONGS.reduce((sum, s) => sum + (votes[s] || 0), 0);
+      const desglose = SONGS.map(s => `${TITLES[s]}: ${votes[s] || 0}`).join("\n");
+      alert(`Votos totales: ${total}\n\n${desglose}`);
+    } catch (err) {
+      alert("No se pudieron obtener los votos.");
+    }
+  }
+});
 
 // ---------- Únete al team ----------
 const teamForm = document.getElementById("teamForm");
