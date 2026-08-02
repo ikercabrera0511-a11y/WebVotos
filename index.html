@@ -432,6 +432,11 @@
     border-color: rgba(255,77,141,0.6);
     color: var(--pink);
   }
+  .vote-btn.closed:not(.voted) {
+    opacity: 0.55;
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: none;
+  }
 
   @media (max-width: 700px) {
     .vote-btn {
@@ -908,6 +913,21 @@ function getNextMonday() {
   return target;
 }
 
+const VOTE_DEADLINE = getNextMonday();
+const VOTE_CLOSED_MSG = "El tiempo para votar se ha agotado, por favor, manténgase pendiente a las redes sociales de Reglezz para conocer el próximo movimiento.";
+let votingClosed = false;
+
+function closeVoting() {
+  if (votingClosed) return;
+  votingClosed = true;
+  document.querySelectorAll(".vote-btn").forEach(btn => {
+    btn.classList.add("closed");
+    if (!btn.classList.contains("voted")) {
+      btn.textContent = "Votación cerrada";
+    }
+  });
+}
+
 function updateCountdown() {
   const daysEl = document.getElementById("cdDays");
   const hoursEl = document.getElementById("cdHours");
@@ -915,13 +935,7 @@ function updateCountdown() {
   const secsEl = document.getElementById("cdSecs");
   if (!daysEl) return;
 
-  let target = getNextMonday();
-  let diffMs = target - new Date();
-  if (diffMs <= 0) {
-    target = getNextMonday();
-    diffMs = target - new Date();
-  }
-
+  const diffMs = VOTE_DEADLINE - new Date();
   const totalSecs = Math.max(0, Math.floor(diffMs / 1000));
   const days = Math.floor(totalSecs / 86400);
   const hours = Math.floor((totalSecs % 86400) / 3600);
@@ -932,6 +946,8 @@ function updateCountdown() {
   hoursEl.textContent = String(hours).padStart(2, "0");
   minsEl.textContent = String(mins).padStart(2, "0");
   secsEl.textContent = String(secs).padStart(2, "0");
+
+  if (diffMs <= 0) closeVoting();
 }
 
 updateCountdown();
@@ -1076,6 +1092,10 @@ async function init() {
 
   document.querySelectorAll(".vote-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
+      if (votingClosed) {
+        alert(VOTE_CLOSED_MSG);
+        return;
+      }
       const song = btn.closest(".card").dataset.song;
       const currentVote = localStorage.getItem(VOTED_KEY);
       if (currentVote === song) return;
